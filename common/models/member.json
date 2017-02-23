@@ -7,27 +7,59 @@
     "validateUpsert": true
   },
   "properties": {
+    "nickName": {
+      "type": "string",
+      "required": true
+    },
     "firstName": {
-      "type": "string",
-      "required": true
-    },
-    "lastName": {
-      "type": "string",
-      "required": true
-    },
-    "phone": {
       "type": "string"
     },
-    "igshpaId": {
-      "type": "number"
+    "lastName": {
+      "type": "string"
+    },
+    "initial": {
+      "type": "string"
+    },
+    "prefix": {
+      "type": "string"
+    },
+    "suffix": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "company": {
+      "type": "string"
     },
     "address": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "zip": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "phone1": {
+      "type": "string"
+    },
+    "phone2": {
+      "type": "string"
+    },
+    "fax": {
       "type": "string"
     },
     "website": {
       "type": "string"
     },
-    "affiliation": {
+    "attendeeType": {
       "type": "string"
     }
   },

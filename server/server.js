@@ -23,7 +23,8 @@ app.start = function() {
 boot(app, __dirname, function(err) {
   if (err) throw err;
 
-  // start the server if `$ node server.js`
+  // start the server if `$ node server.js not node .`
   if (require.main === module)
     app.start();
 });
+
