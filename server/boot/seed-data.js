@@ -17,7 +17,7 @@ module.exports = function(app) {
     company: 'International Ground Source Heat Pump Association',
     address: '315 S Hester St, Apt 317',
     city: 'Stillwater',
-    state: 'Oklahoma',
+    state: 'OK',
     zip: '74074',
     country: 'United States',
     phone1: '4057803834',
