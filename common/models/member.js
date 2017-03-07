@@ -14,7 +14,9 @@ if (!fs.existsSync(qrDir)){
 
 module.exports = function(Member) {
   Member.generateBadges = function (next) {
-    Member.find(function (err, members) {
+    Member.find({
+      order: 'lastName ASC'
+    }, function (err, members) {
       var memberCount = members.length;
 
       var asyncArray = [];
@@ -77,20 +79,22 @@ module.exports = function(Member) {
 
                 // Print the nickname
                 ctx.font = 'bold 55px Times New Roman';
-                ctx.fillText(member.firstName.toUpperCase(), x + 265, y + 260);
+                ctx.fillText(((member.nickName || member.firstName).
+                  toUpperCase()).substring(0,13), x + 265, y + 260);
 
                 // Print the Name
                 ctx.font = 'bold 40px Times New Roman';
-                ctx.fillText(member.firstName + " " + member.lastName,
-                  x + 265, y + 330);
+                ctx.fillText((member.firstName + ' ' + member.lastName).
+                  substring(0,23), x + 265, y + 330);
 
                 // Print the affiliation
                 ctx.font = 'bold 30px Times New Roman';
-                ctx.fillText(member.company, x + 265, y + 380);
+                ctx.fillText((member.company || '').substring(0, 35),
+                  x + 265, y + 380);
 
                 // Print the city, state
-                ctx.fillText(member.city + ', ' + member.state,
-                  x + 265, y + 430);
+                ctx.fillText(((member.city || '') + ', ' +
+                  (member.state || '')).substring(0, 35), x + 265, y + 430);
                 a += 1;
                 stream.on('data', function(chunk){
                   out.write(chunk);
@@ -221,18 +225,21 @@ module.exports = function(Member) {
 
           // Print the nickname
           ctx.font = 'bold 55px Times New Roman';
-          ctx.fillText(member.firstName.toUpperCase(), 285, 280);
+          ctx.fillText(((member.nickName || member.firstName).toUpperCase()).
+            substring(0,13), 285, 280);
 
           // Print the Name
           ctx.font = 'bold 40px Times New Roman';
-          ctx.fillText(member.firstName + ' ' + member.lastName, 285, 350);
+          ctx.fillText((member.firstName + ' ' + member.lastName).
+            substring(0,23), 285, 350);
 
           // Print the affiliation
           ctx.font = 'bold 30px Times New Roman';
-          ctx.fillText(member.company, 285, 400);
+          ctx.fillText((member.company || '').substring(0, 35), 285, 400);
 
           // Print the city, state
-          ctx.fillText(member.city + ', ' + member.state, 285, 450);
+          ctx.fillText(((member.city || '') + ', ' + (member.state || '')).
+            substring(0, 35), 285, 450);
 
           stream.on('data', function(chunk){
             out.write(chunk);
