@@ -38,11 +38,18 @@ module.exports = function(Member) {
 
         // feed in the logos
         fs.readFile('img/digin.png', function (err, digin) {
+          if (err) {
+            return callback(err);
+          }
           var diginImg = new Image;
           diginImg.src = digin;
           fs.readFile('img/logo.png', function (err, logo) {
+            if (err) {
+              return callback(err);
+            }
             var logoImg = new Image;
             logoImg.src = logo;
+            //var stream = canvas.pngStream();
 
             var x = 20;
             var y = 20;
@@ -55,7 +62,7 @@ module.exports = function(Member) {
                   return cb(err);
                 }
                 var img = new Image;
-                var stream = canvas.pngStream();
+                img.src = badge;
                 if (a != 1 && a % 2 != 0) {
                   x = 20;
                   y += 600;
@@ -69,8 +76,7 @@ module.exports = function(Member) {
                   diginImg.width/3, diginImg.height/3);
 
                 // Print the qr code
-                img.src = badge;
-                ctx.drawImage(img, x + 10, y + 210, img.width/2, img.height/2);
+                ctx.drawImage(img, x + 10, y + 210, img.width/4, img.height/4);
 
                 // Print the header
                 ctx.fillStyle = '#000';
@@ -89,24 +95,23 @@ module.exports = function(Member) {
 
                 // Print the affiliation
                 ctx.font = 'bold 30px Times New Roman';
-                ctx.fillText((member.company || '').substring(0, 35),
+                ctx.fillText((member.company || '').substring(0, 30),
                   x + 265, y + 380);
 
                 // Print the city, state
                 ctx.fillText(((member.city || '') + ', ' +
                   (member.state || '')).substring(0, 35), x + 265, y + 430);
                 a += 1;
-                stream.on('data', function(chunk){
-                  out.write(chunk);
-                });
-                stream.on('end', function(){
-                  cb();
-                });
+                cb();
               });
             }, function (err) {
               if (err) {
                 return callback(err);
               }
+              var stream = canvas.pngStream();
+              stream.on('data', function(chunk){
+                out.write(chunk);
+              });
               callback();
             });
           });
@@ -163,7 +168,8 @@ module.exports = function(Member) {
               (member.attendeeType || '') + '"' +
         '}';
 
-        var memberQr = qr.image(memberString, { type: 'png' });
+        var memberQr = qr.image(memberString, { type: 'png', margin: 0,
+          size: 10 });
         memberQr.pipe(fs.createWriteStream(qrDir + '/' +
           member.id + '.png'));
         callback();
@@ -212,11 +218,12 @@ module.exports = function(Member) {
 
           // Print the logo
           ctx.drawImage(logoImg, 20, 20, logoImg.width/3, logoImg.height/3);
-          ctx.drawImage(diginImg, 160, -15, diginImg.width/3, diginImg.height/3);
+          ctx.drawImage(diginImg, 160, -15, diginImg.width/3,
+            diginImg.height/3);
 
           // Print the qr code
           img.src = badge;
-          ctx.drawImage(img, 30, 230, img.width/2, img.height/2);
+          ctx.drawImage(img, 30, 230, img.width/4, img.height/4);
 
           // Print the header
           ctx.fillStyle = '#000';
@@ -235,7 +242,7 @@ module.exports = function(Member) {
 
           // Print the affiliation
           ctx.font = 'bold 30px Times New Roman';
-          ctx.fillText((member.company || '').substring(0, 35), 285, 400);
+          ctx.fillText((member.company || '').substring(0, 30), 285, 400);
 
           // Print the city, state
           ctx.fillText(((member.city || '') + ', ' + (member.state || '')).
@@ -289,7 +296,7 @@ module.exports = function(Member) {
           (member.attendeeType || '') + '"' +
     '}';
 
-    var memberQr = qr.image(memberString, { type: 'png' });
+    var memberQr = qr.image(memberString, { type: 'png', margin: 0, size: 10 });
     memberQr.pipe(fs.createWriteStream(qrDir + '/' +
       member.id + '.png'));
     next();
