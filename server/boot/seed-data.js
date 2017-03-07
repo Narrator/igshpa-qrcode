@@ -2,8 +2,13 @@ module.exports = function(app) {
   var User = app.models.member;
   var Role = app.models.Role;
   var RoleMapping = app.models.RoleMapping;
+  RoleMapping.settings.strictObjectIDCoercion = true;
 
-  User.create([{
+  User.findOrCreate({
+    where: {
+      username: 'igshpaAdmin'
+    }
+  }, {
     username: 'igshpaAdmin',
     email: 'admin@igshpa.org',
     password: 'igshpa123$',
@@ -24,26 +29,39 @@ module.exports = function(app) {
     phone2: '4057803834,100',
     website: 'www.igshpa.org',
     attendeeType: 'Exhibitor'
-  }], function(err, users) {
+  }, function(err, user) {
     if (err) throw err;
-    console.log(users);
 
     //create the admin role
-    Role.create({
-      name: 'admin'
+    Role.findOrCreate({
+      where: {
+        name: 'admin'
+      }
+    }, {
+      name: 'admin',
+      created: new Date(),
+      modified: new Date()
     }, function(err, role) {
       if (err) throw err;
 
-      console.log('Created role:', role);
-
-      role.principals.create({
-        principalType: RoleMapping.USER,
-        principalId: users[0].id
-      }, function(err, principal) {
+      RoleMapping.findOne({
+        where: {
+          principalType: RoleMapping.USER,
+          principalId: user.id.toString()
+        }
+      }, function (err, principal) {
         if (err) throw err;
 
-        console.log('Created principal:', principal);
+        if (!principal) {
+          role.principals.create({
+            principalType: RoleMapping.USER,
+            principalId: user.id.toString()
+          }, function(err, principal) {
+            if (err) throw err;
+          });
+        }
       });
+
     });
   });
 };
