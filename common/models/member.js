@@ -76,7 +76,8 @@ module.exports = function(Member) {
                   diginImg.width/3, diginImg.height/3);
 
                 // Print the qr code
-                ctx.drawImage(img, x + 10, y + 210, img.width/4, img.height/4);
+                var qrX = (a % 2 != 0) ? 20 : 10;
+                ctx.drawImage(img, x + qrX, y + 210, img.width/2, img.height/2);
 
                 // Print the header
                 ctx.fillStyle = '#000';
@@ -95,12 +96,19 @@ module.exports = function(Member) {
 
                 // Print the affiliation
                 ctx.font = 'bold 30px Times New Roman';
-                ctx.fillText((member.company || '').substring(0, 30),
-                  x + 265, y + 380);
-
-                // Print the city, state
-                ctx.fillText(((member.city || '') + ', ' +
-                  (member.state || '')).substring(0, 35), x + 265, y + 430);
+                if (member.company) {
+                  ctx.fillText((member.company).substring(0, 30),
+                    x + 265, y + 380);
+                  // Print the city, state
+                  ctx.fillText(((member.city || '') + ', ' +
+                    (member.state || member.country || '')).
+                    substring(0, 35), x + 265, y + 430);
+                } else {
+                  // Print the city, state
+                  ctx.fillText(((member.city || '') + ', ' +
+                    (member.state || member.country || '')).
+                    substring(0, 35), x + 265, y + 380);
+                }
                 a += 1;
                 cb();
               });
@@ -146,12 +154,12 @@ module.exports = function(Member) {
       }
       async.each(members, function (member, callback) {
         var memberString =  '{' +
-          '"nickName": "' + (member.nickName || '') + '",' +
+          //'"nickName": "' + (member.nickName || '') + '",' +
           '"firstName": "' + (member.firstName || '') + '",' +
           '"lastName": "' + (member.lastName || '') + '",' +
-          '"initial": "' + (member.initial || '') + '",' +
-          '"prefix": "' + (member.prefix || '') + '",' +
-          '"suffix": "' + (member.suffix || '') + '",' +
+          //'"initial": "' + (member.initial || '') + '",' +
+          //'"prefix": "' + (member.prefix || '') + '",' +
+          //'"suffix": "' + (member.suffix || '') + '",' +
           '"title": "' + (member.title || '') + '",' +
           '"company": "' + (member.company || '') + '",' +
           '"address": "' + (member.address || '') + '",' +
@@ -161,15 +169,14 @@ module.exports = function(Member) {
           '"country": "' + (member.country || '') + '",' +
           '"phone1": "' + (member.phone1 || '') + '",' +
           '"phone2": "' + (member.phone2 || '') + '",' +
-          '"fax": "' + (member.fax || '') + '",' +
+          //'"fax": "' + (member.fax || '') + '",' +
           '"email": "' + (member.email || '') + '",' +
-          '"website": "' + (member.website || '') + '",' +
+          //'"website": "' + (member.website || '') + '",' +
           '"attendeeType": "' + '2017 IGSHPA Conference - ' +
               (member.attendeeType || '') + '"' +
         '}';
 
-        var memberQr = qr.image(memberString, { type: 'png', margin: 0,
-          size: 10 });
+        var memberQr = qr.image(memberString, { type: 'png', margin: 0 });
         memberQr.pipe(fs.createWriteStream(qrDir + '/' +
           member.id + '.png'));
         callback();
@@ -223,7 +230,7 @@ module.exports = function(Member) {
 
           // Print the qr code
           img.src = badge;
-          ctx.drawImage(img, 30, 230, img.width/4, img.height/4);
+          ctx.drawImage(img, 30, 230, img.width/2, img.height/2);
 
           // Print the header
           ctx.fillStyle = '#000';
@@ -242,11 +249,19 @@ module.exports = function(Member) {
 
           // Print the affiliation
           ctx.font = 'bold 30px Times New Roman';
-          ctx.fillText((member.company || '').substring(0, 30), 285, 400);
+          if (member.company) {
+            ctx.fillText((member.company).substring(0, 30), 285, 400);
 
-          // Print the city, state
-          ctx.fillText(((member.city || '') + ', ' + (member.state || '')).
-            substring(0, 35), 285, 450);
+            // Print the city, state
+            ctx.fillText(((member.city || '') + ', ' +
+              (member.state || member.country || '')).
+              substring(0, 35), 285, 450);
+          } else {
+            // Print the city, state
+            ctx.fillText(((member.city || '') + ', ' +
+              (member.state || member.country || '')).
+              substring(0, 35), 285, 400);
+          }
 
           stream.on('data', function(chunk){
             out.write(chunk);
@@ -274,12 +289,12 @@ module.exports = function(Member) {
   Member.prototype.generateQRCode = function (next) {
     var member = this;
     var memberString =  '{' +
-      '"nickName": "' + (member.nickName || '') + '",' +
+      //'"nickName": "' + (member.nickName || '') + '",' +
       '"firstName": "' + (member.firstName || '') + '",' +
       '"lastName": "' + (member.lastName || '') + '",' +
       '"initial": "' + (member.initial || '') + '",' +
-      '"prefix": "' + (member.prefix || '') + '",' +
-      '"suffix": "' + (member.suffix || '') + '",' +
+      //'"prefix": "' + (member.prefix || '') + '",' +
+      //'"suffix": "' + (member.suffix || '') + '",' +
       '"title": "' + (member.title || '') + '",' +
       '"company": "' + (member.company || '') + '",' +
       '"address": "' + (member.address || '') + '",' +
@@ -289,14 +304,14 @@ module.exports = function(Member) {
       '"country": "' + (member.country || '') + '",' +
       '"phone1": "' + (member.phone1 || '') + '",' +
       '"phone2": "' + (member.phone2 || '') + '",' +
-      '"fax": "' + (member.fax || '') + '",' +
+      //'"fax": "' + (member.fax || '') + '",' +
       '"email": "' + (member.email || '') + '",' +
-      '"website": "' + (member.website || '') + '",' +
+      //'"website": "' + (member.website || '') + '",' +
       '"attendeeType": "' + '2017 IGSHPA Conference - ' +
           (member.attendeeType || '') + '"' +
     '}';
 
-    var memberQr = qr.image(memberString, { type: 'png', margin: 0, size: 10 });
+    var memberQr = qr.image(memberString, { type: 'png', margin: 0 });
     memberQr.pipe(fs.createWriteStream(qrDir + '/' +
       member.id + '.png'));
     next();
