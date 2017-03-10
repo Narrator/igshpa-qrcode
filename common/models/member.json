@@ -9,7 +9,8 @@
   "properties": {
     "email": {
       "type": "string",
-      "required": false
+      "required": false,
+      "unique": false
     },
     "nickName": {
       "type": "string"
