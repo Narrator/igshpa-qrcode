@@ -7,9 +7,12 @@
     "validateUpsert": true
   },
   "properties": {
-    "nickName": {
+    "email": {
       "type": "string",
-      "required": true
+      "required": false
+    },
+    "nickName": {
+      "type": "string"
     },
     "firstName": {
       "type": "string"
@@ -69,6 +72,9 @@
     "modified": {
       "type": "date",
       "default": "$now"
+    },
+    "badgeGenerated": {
+      "type": "boolean"
     }
   },
   "validations": [],

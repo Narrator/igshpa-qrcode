@@ -97,15 +97,16 @@ module.exports = function(Member) {
                 // Print the affiliation
                 ctx.font = 'bold 30px Times New Roman';
                 if (member.company) {
-                  ctx.fillText((member.company).substring(0, 30),
+                  ctx.fillText((member.company).substring(0, 33),
                     x + 265, y + 380);
                   // Print the city, state
-                  ctx.fillText(((member.city || '') + ', ' +
+                  ctx.fillText(((member.city || '') +
+                    ((member.city) ? ', ': '') +
                     (member.state || member.country || '')).
                     substring(0, 35), x + 265, y + 430);
                 } else {
                   // Print the city, state
-                  ctx.fillText(((member.city || '') + ', ' +
+                  ctx.fillText(((member.city || '') + ((member.city) ? ', ': '') +
                     (member.state || member.country || '')).
                     substring(0, 35), x + 265, y + 380);
                 }
@@ -203,71 +204,78 @@ module.exports = function(Member) {
 
   Member.prototype.generateBadge = function (next) {
     var member = this;
-    fs.readFile('img/digin.png', function (err, digin) {
-      var Image = Canvas.Image;
-      var diginImg = new Image;
-      diginImg.src = digin;
-      fs.readFile('img/logo.png', function (err, logo) {
-        var logoImg = new Image;
-        logoImg.src = logo;
-        fs.readFile('qr-generated/' + member.id + '.png', function(err, badge) {
-          if (err) {
-            return next(err);
-          }
-          var canvas = new Canvas(800, 600);
-          var ctx = canvas.getContext('2d');
-          var img = new Image;
-          var stream = canvas.pngStream();
-          var out = fs.createWriteStream(badgeDir + '/' + member.firstName
-            + '-' + member.lastName + '.png');
-          ctx.fillStyle = '#fff';
-          ctx.fillRect(0, 0, 800, 600);
+    member.generateQRCode(function (err, res) {
+      if (err) {
+        return next(err);
+      }
+      fs.readFile('img/digin.png', function (err, digin) {
+        var Image = Canvas.Image;
+        var diginImg = new Image;
+        diginImg.src = digin;
+        fs.readFile('img/logo.png', function (err, logo) {
+          var logoImg = new Image;
+          logoImg.src = logo;
+          fs.readFile('qr-generated/' + member.id + '.png', function(err, badge) {
+            if (err) {
+              return next(err);
+            }
+            var canvas = new Canvas(800, 600);
+            var ctx = canvas.getContext('2d');
+            var img = new Image;
+            var stream = canvas.pngStream();
+            var out = fs.createWriteStream(badgeDir + '/' + member.firstName
+              + '-' + member.lastName + '.png');
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(0, 0, 800, 600);
 
-          // Print the logo
-          ctx.drawImage(logoImg, 20, 20, logoImg.width/3, logoImg.height/3);
-          ctx.drawImage(diginImg, 160, -15, diginImg.width/3,
-            diginImg.height/3);
+            // Print the logo
+            ctx.drawImage(logoImg, 20, 20, logoImg.width/3, logoImg.height/3);
+            ctx.drawImage(diginImg, 160, -15, diginImg.width/3,
+              diginImg.height/3);
 
-          // Print the qr code
-          img.src = badge;
-          ctx.drawImage(img, 30, 230, img.width/2, img.height/2);
+            // Print the qr code
+            img.src = badge;
+            ctx.drawImage(img, 30, 230, img.width/2, img.height/2);
 
-          // Print the header
-          ctx.fillStyle = '#000';
-          ctx.font = 'bold 25px Arial';
-          ctx.fillText('DENVER,CO | MARCH 14-16', 260, 170);
+            // Print the header
+            ctx.fillStyle = '#000';
+            ctx.font = 'bold 25px Arial';
+            ctx.fillText('DENVER,CO | MARCH 14-16', 260, 170);
 
-          // Print the nickname
-          ctx.font = 'bold 55px Times New Roman';
-          ctx.fillText(((member.nickName || member.firstName).toUpperCase()).
-            substring(0,13), 285, 280);
+            // Print the nickname
+            ctx.font = 'bold 55px Times New Roman';
+            ctx.fillText(((member.nickName || member.firstName).toUpperCase()).
+              substring(0,13), 285, 280);
 
-          // Print the Name
-          ctx.font = 'bold 40px Times New Roman';
-          ctx.fillText((member.firstName + ' ' + member.lastName).
-            substring(0,23), 285, 350);
+            // Print the Name
+            ctx.font = 'bold 40px Times New Roman';
+            ctx.fillText((member.firstName + ' ' + member.lastName).
+              substring(0,23), 285, 350);
 
-          // Print the affiliation
-          ctx.font = 'bold 30px Times New Roman';
-          if (member.company) {
-            ctx.fillText((member.company).substring(0, 30), 285, 400);
+            // Print the affiliation
+            ctx.font = 'bold 30px Times New Roman';
+            if (member.company) {
+              ctx.fillText((member.company).substring(0, 33), 285, 400);
 
-            // Print the city, state
-            ctx.fillText(((member.city || '') + ', ' +
-              (member.state || member.country || '')).
-              substring(0, 35), 285, 450);
-          } else {
-            // Print the city, state
-            ctx.fillText(((member.city || '') + ', ' +
-              (member.state || member.country || '')).
-              substring(0, 35), 285, 400);
-          }
+              // Print the city, state
+              ctx.fillText(((member.city || '') + ((member.city) ? ', ': '') +
+                (member.state || member.country || '')).
+                substring(0, 35), 285, 450);
+            } else {
+              // Print the city, state
+              ctx.fillText(((member.city || '') + ((member.city) ? ', ': '') +
+                (member.state || member.country || '')).
+                substring(0, 35), 285, 400);
+            }
 
-          stream.on('data', function(chunk){
-            out.write(chunk);
-          });
-          stream.on('end', function(){
-            next();
+            stream.on('data', function(chunk){
+              out.write(chunk);
+            });
+            stream.on('end', function(){
+              member.updateAttributes({
+                badgeGenerated: true
+              }, next);
+            });
           });
         });
       });
@@ -325,6 +333,36 @@ module.exports = function(Member) {
     },
     http: {
       path: '/generateQRCode',
+      verb: 'get'
+    },
+    isStatic: false
+  });
+
+  Member.prototype.getImage = function (req, res, next) {
+    var member = this;
+    var img = fs.readFileSync('badge-generated/' + member.firstName + '-' +
+      member.lastName + '.png');
+    res.writeHead(200, {'Content-Type': 'image/png' });
+    res.end(img, 'binary');
+  };
+  Member.remoteMethod('getImage', {
+    accepts: [
+      {
+        arg: 'req',
+        type: 'object',
+        http: {source: 'req'}
+      }, {
+        arg: 'res',
+        type: 'object',
+        http: {source: 'res'}
+      }],
+    returns: {
+      arg: 'data',
+      type: 'object',
+      root: true
+    },
+    http: {
+      path: '/getImage',
       verb: 'get'
     },
     isStatic: false
