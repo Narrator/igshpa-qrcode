@@ -164,7 +164,7 @@ module.exports = function(Member) {
           //'"nickName": "' + (member.nickName || '') + '",' +
           '"firstName": "' + (member.firstName || '') + '",' +
           '"lastName": "' + (member.lastName || '') + '",' +
-          //'"initial": "' + (member.initial || '') + '",' +
+          '"initial": "' + (member.initial || '') + '",' +
           //'"prefix": "' + (member.prefix || '') + '",' +
           //'"suffix": "' + (member.suffix || '') + '",' +
           '"title": "' + (member.title || '') + '",' +
@@ -179,7 +179,7 @@ module.exports = function(Member) {
           //'"fax": "' + (member.fax || '') + '",' +
           '"email": "' + (member.email || '') + '",' +
           //'"website": "' + (member.website || '') + '",' +
-          '"attendeeType": "' + '2017 IGSHPA Conference - ' +
+          '"attendeeType": "' + '2018 IGSHPA Conference - ' +
               (member.attendeeType || '') + '"' +
         '}';
 
@@ -321,7 +321,7 @@ module.exports = function(Member) {
       //'"fax": "' + (member.fax || '') + '",' +
       '"email": "' + (member.email || '') + '",' +
       //'"website": "' + (member.website || '') + '",' +
-      '"attendeeType": "' + '2017 IGSHPA Conference - ' +
+      '"attendeeType": "' + '2018 IGSHPA Conference - ' +
           (member.attendeeType || '') + '"' +
     '}';
 
