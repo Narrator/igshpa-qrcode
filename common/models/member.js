@@ -77,14 +77,14 @@ module.exports = function(Member) {
                   x += 800;
                 }
                 // Print the logo
-                ctx.drawImage(logoImg, x, y,
+                ctx.drawImage(logoImg, x, y + 20,
                   logoImg.width/3, logoImg.height/3);
-                ctx.drawImage(diginImg, x + 220, y - 20,
+                ctx.drawImage(diginImg, x + 220, y,
                   diginImg.width/1.5, diginImg.height/1.5);
 
                 // Print the qr code
                 // var qrX = (a % 2 != 0) ? 20 : 10;
-                ctx.drawImage(img, x + 10, y + 210, img.width/2, img.height/2);
+                ctx.drawImage(img, x + 10, y + 230, img.width/2, img.height/2);
 
                 // Print the header
                 ctx.fillStyle = '#000';
@@ -94,27 +94,27 @@ module.exports = function(Member) {
                 // Print the nickname
                 ctx.font = 'bold 60px Times New Roman';
                 ctx.fillText(((member.nickName || member.firstName).toUpperCase()).
-                  substring(0,13), x + 230, y + 260);
+                  substring(0,13), x + 230, y + 270);
 
                 // Print the Name
                 ctx.font = 'bold 40px Times New Roman';
                 ctx.fillText((member.firstName + ' ' + member.lastName).
-                  substring(0,30), x + 230, y + 320);
+                  substring(0,30), x + 230, y + 330);
 
                 // Print the affiliation
                 ctx.font = 'bold 20px Times New Roman';
                 if (member.company) {
-                  ctx.fillText((member.company).substring(0, 40), x + 230, y + 365);
+                  ctx.fillText((member.company).substring(0, 40), x + 230, y + 375);
 
                   // Print the city, state
                   ctx.fillText(((member.city || '') + ((member.city) ? ', ': '') +
                     (member.state || member.country || '')).
-                    substring(0, 35), x + 230, y + 400);
+                    substring(0, 35), x + 230, y + 405);
                 } else {
                   // Print the city, state
                   ctx.fillText(((member.city || '') + ((member.city) ? ', ': '') +
                     (member.state || member.country || '')).
-                    substring(0, 35), x + 230, y + 365);
+                    substring(0, 35), x + 230, y + 375);
                 }
                 a += 1;
                 cb();
@@ -235,13 +235,13 @@ module.exports = function(Member) {
             ctx.fillRect(0, 0, 800, 600);
 
             // Print the logo
-            ctx.drawImage(logoImg, 20, 20, logoImg.width/3, logoImg.height/3);
-            ctx.drawImage(diginImg, 240, 0, diginImg.width/1.5,
+            ctx.drawImage(logoImg, 20, 40, logoImg.width/3, logoImg.height/3);
+            ctx.drawImage(diginImg, 240, 20, diginImg.width/1.5,
               diginImg.height/1.5);
 
             // Print the qr code
             img.src = badge;
-            ctx.drawImage(img, 30, 230, img.width/2, img.height/2);
+            ctx.drawImage(img, 30, 250, img.width/2, img.height/2);
 
             // Print the header
             ctx.fillStyle = '#000';
@@ -251,27 +251,27 @@ module.exports = function(Member) {
             // Print the nickname
             ctx.font = 'bold 60px Times New Roman';
             ctx.fillText(((member.nickName || member.firstName).toUpperCase()).
-              substring(0,13), 250, 280);
+              substring(0,13), 250, 290);
 
             // Print the Name
             ctx.font = 'bold 40px Times New Roman';
             ctx.fillText((member.firstName + ' ' + member.lastName).
-              substring(0,30), 250, 340);
+              substring(0,30), 250, 350);
 
             // Print the affiliation
             ctx.font = 'bold 25px Times New Roman';
             if (member.company) {
-              ctx.fillText((member.company).substring(0, 40), 250, 385);
+              ctx.fillText((member.company).substring(0, 40), 250, 395);
 
               // Print the city, state
               ctx.fillText(((member.city || '') + ((member.city) ? ', ': '') +
                 (member.state || member.country || '')).
-                substring(0, 35), 250, 420);
+                substring(0, 35), 250, 425);
             } else {
               // Print the city, state
               ctx.fillText(((member.city || '') + ((member.city) ? ', ': '') +
                 (member.state || member.country || '')).
-                substring(0, 35), 250, 385);
+                substring(0, 35), 250, 395);
             }
 
             stream.on('data', function(chunk){
