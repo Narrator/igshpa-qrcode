@@ -1,5 +1,5 @@
 var mongoUri = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL ||
-  'mongodb://';
+  'mongodb://igshpa:igshpa123$@ds127300.mlab.com:27300/igshpa-qrcode';
 module.exports = {
   mongodb: {
     url: mongoUri,

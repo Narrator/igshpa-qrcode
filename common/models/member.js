@@ -19,6 +19,13 @@ module.exports = function(Member) {
     }, function (err, members) {
       var memberCount = members.length;
 
+      // var mam = [];
+      // for (let k = 0; k < 30; k++) {
+      //   mam.push(members[0]);
+      // }
+      // members = mam;
+      // memberCount = 30;
+
       var asyncArray = [];
       for (var i = 0 ; i < memberCount; i += 6) {
         var j = i + 6;
@@ -37,7 +44,7 @@ module.exports = function(Member) {
         ctx.fillRect(0, 0, 1600, 1800);
 
         // feed in the logos
-        fs.readFile('img/digin.png', function (err, digin) {
+        fs.readFile('img/better-together.png', function (err, digin) {
           if (err) {
             return callback(err);
           }
@@ -72,43 +79,42 @@ module.exports = function(Member) {
                 // Print the logo
                 ctx.drawImage(logoImg, x, y,
                   logoImg.width/3, logoImg.height/3);
-                ctx.drawImage(diginImg, x + 140, y - 35,
-                  diginImg.width/3, diginImg.height/3);
+                ctx.drawImage(diginImg, x + 220, y - 20,
+                  diginImg.width/1.5, diginImg.height/1.5);
 
                 // Print the qr code
-                var qrX = (a % 2 != 0) ? 20 : 10;
-                ctx.drawImage(img, x + qrX, y + 210, img.width/2, img.height/2);
+                // var qrX = (a % 2 != 0) ? 20 : 10;
+                ctx.drawImage(img, x + 10, y + 210, img.width/2, img.height/2);
 
                 // Print the header
                 ctx.fillStyle = '#000';
                 ctx.font = 'bold 25px Arial';
-                ctx.fillText('DENVER,CO | MARCH 14-16', x + 240, y + 150);
+                // ctx.fillText('ORLANDO,FL | MARCH 26-29', x + 240, y + 150);
 
                 // Print the nickname
-                ctx.font = 'bold 55px Times New Roman';
-                ctx.fillText(((member.nickName || member.firstName).
-                  toUpperCase()).substring(0,13), x + 265, y + 260);
+                ctx.font = 'bold 60px Times New Roman';
+                ctx.fillText(((member.nickName || member.firstName).toUpperCase()).
+                  substring(0,13), x + 230, y + 260);
 
                 // Print the Name
                 ctx.font = 'bold 40px Times New Roman';
                 ctx.fillText((member.firstName + ' ' + member.lastName).
-                  substring(0,23), x + 265, y + 330);
+                  substring(0,30), x + 230, y + 320);
 
                 // Print the affiliation
-                ctx.font = 'bold 30px Times New Roman';
+                ctx.font = 'bold 20px Times New Roman';
                 if (member.company) {
-                  ctx.fillText((member.company).substring(0, 33),
-                    x + 265, y + 380);
+                  ctx.fillText((member.company).substring(0, 40), x + 230, y + 365);
+
                   // Print the city, state
-                  ctx.fillText(((member.city || '') +
-                    ((member.city) ? ', ': '') +
+                  ctx.fillText(((member.city || '') + ((member.city) ? ', ': '') +
                     (member.state || member.country || '')).
-                    substring(0, 35), x + 265, y + 430);
+                    substring(0, 35), x + 230, y + 400);
                 } else {
                   // Print the city, state
                   ctx.fillText(((member.city || '') + ((member.city) ? ', ': '') +
                     (member.state || member.country || '')).
-                    substring(0, 35), x + 265, y + 380);
+                    substring(0, 35), x + 230, y + 365);
                 }
                 a += 1;
                 cb();
@@ -208,7 +214,7 @@ module.exports = function(Member) {
       if (err) {
         return next(err);
       }
-      fs.readFile('img/digin.png', function (err, digin) {
+      fs.readFile('img/better-together.png', function (err, digin) {
         var Image = Canvas.Image;
         var diginImg = new Image;
         diginImg.src = digin;
@@ -230,8 +236,8 @@ module.exports = function(Member) {
 
             // Print the logo
             ctx.drawImage(logoImg, 20, 20, logoImg.width/3, logoImg.height/3);
-            ctx.drawImage(diginImg, 160, -15, diginImg.width/3,
-              diginImg.height/3);
+            ctx.drawImage(diginImg, 240, 0, diginImg.width/1.5,
+              diginImg.height/1.5);
 
             // Print the qr code
             img.src = badge;
@@ -239,33 +245,33 @@ module.exports = function(Member) {
 
             // Print the header
             ctx.fillStyle = '#000';
-            ctx.font = 'bold 25px Arial';
-            ctx.fillText('DENVER,CO | MARCH 14-16', 260, 170);
+            ctx.font = 'bold 18px Arial';
+            // ctx.fillText(' | Orlando, Fl | March 26-29', 501, 170);
 
             // Print the nickname
-            ctx.font = 'bold 55px Times New Roman';
+            ctx.font = 'bold 60px Times New Roman';
             ctx.fillText(((member.nickName || member.firstName).toUpperCase()).
-              substring(0,13), 285, 280);
+              substring(0,13), 250, 280);
 
             // Print the Name
             ctx.font = 'bold 40px Times New Roman';
             ctx.fillText((member.firstName + ' ' + member.lastName).
-              substring(0,23), 285, 350);
+              substring(0,30), 250, 340);
 
             // Print the affiliation
-            ctx.font = 'bold 30px Times New Roman';
+            ctx.font = 'bold 25px Times New Roman';
             if (member.company) {
-              ctx.fillText((member.company).substring(0, 33), 285, 400);
+              ctx.fillText((member.company).substring(0, 40), 250, 385);
 
               // Print the city, state
               ctx.fillText(((member.city || '') + ((member.city) ? ', ': '') +
                 (member.state || member.country || '')).
-                substring(0, 35), 285, 450);
+                substring(0, 35), 250, 420);
             } else {
               // Print the city, state
               ctx.fillText(((member.city || '') + ((member.city) ? ', ': '') +
                 (member.state || member.country || '')).
-                substring(0, 35), 285, 400);
+                substring(0, 35), 250, 385);
             }
 
             stream.on('data', function(chunk){
